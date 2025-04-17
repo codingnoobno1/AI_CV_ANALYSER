@@ -69,3 +69,5 @@ Layer	Technology
 ├── AI_SKILSIGHT.sln         # .NET Solution file — links Blazor + MAUI projects
 │
 └── collab_ai.py             # Experimental AI collaboration engine (LLM/chat-style logic)
+
+
