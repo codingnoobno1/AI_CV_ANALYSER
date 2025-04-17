@@ -1,0 +1,101 @@
+@page "/verify-candidate"
+@using Microsoft.AspNetCore.Components.Forms
+@inject NavigationManager NavManager
+
+<h2 class="mt-4 mb-3 text-center">🛂 Document Verification</h2>
+
+@if (string.IsNullOrEmpty(Token))
+{
+    <div class="alert alert-danger">
+        Invalid or missing verification token.
+    </div>
+}
+else
+{
+    <!-- Upload Section -->
+    <div class="container mb-4">
+        <div class="row">
+            <!-- Upload Form -->
+            <div class="col-md-8">
+                <div class="card shadow-sm p-4">
+                    <h4>Upload Your Documents</h4>
+                    <p class="text-muted">Upload PDFs or image files (JPG, PNG).</p>
+
+                    <InputFile OnChange="HandleFileChange" multiple class="form-control mb-3" accept=".pdf,.jpg,.jpeg,.png" />
+
+                    <button class="btn btn-success" @onclick="SubmitDocuments">📤 Submit Documents</button>
+
+                    @if (!string.IsNullOrEmpty(SubmitStatus))
+                    {
+                        <div class="mt-3 alert @statusClass">@SubmitStatus</div>
+                    }
+                </div>
+            </div>
+
+            <!-- File Count Panel -->
+            <div class="col-md-4">
+                <div class="card bg-light p-3 border shadow-sm">
+                    <h5 class="mb-3">📁 Files Selected</h5>
+                    <p><strong>PDFs:</strong> @pdfCount</p>
+                    <p><strong>Images:</strong> @imageCount</p>
+                    <p><strong>Total:</strong> @selectedFiles.Count</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private string? Token;
+    private int pdfCount = 0;
+    private int imageCount = 0;
+    private List<IBrowserFile> selectedFiles = new();
+    private string SubmitStatus = "";
+    private string statusClass = "alert-info";
+
+    protected override void OnInitialized()
+    {
+        var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+        if (query.TryGetValue("token", out var tokenValue))
+        {
+            Token = tokenValue;
+        }
+    }
+
+    private void HandleFileChange(InputFileChangeEventArgs e)
+    {
+        pdfCount = 0;
+        imageCount = 0;
+        selectedFiles.Clear();
+
+        foreach (var file in e.GetMultipleFiles())
+        {
+            selectedFiles.Add(file);
+
+            if (file.Name.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                pdfCount++;
+            else if (file.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                     file.Name.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                     file.Name.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                imageCount++;
+        }
+    }
+
+    private async Task SubmitDocuments()
+    {
+        if (selectedFiles.Count == 0)
+        {
+            SubmitStatus = "No files selected.";
+            statusClass = "alert-warning";
+            return;
+        }
+
+        // Normally here you'd use HttpClient to post files to backend API
+        await Task.Delay(1000); // Simulate API delay
+
+        SubmitStatus = "✅ Documents submitted successfully!";
+        statusClass = "alert-success";
+    }
+}

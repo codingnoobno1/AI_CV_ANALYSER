@@ -1,0 +1,58 @@
+﻿@page "/"
+
+<!-- Top Banner Image -->
+<div class="mb-4">
+    <img src="https://fellow.app/wp-content/uploads/2022/06/hr-meetings.jpg" 
+         alt="HR Meeting Banner" 
+         style="height: 400px; width: 100%; object-fit: cover; border-radius: 10px;" />
+</div>
+
+<!-- Flex Container -->
+<div class="d-flex justify-content-between align-items-start gap-4 px-3 flex-wrap">
+    
+    <!-- Left: Upload Form -->
+    <div class="flex-grow-1" style="min-width: 300px;">
+        <h3>Upload Candidate Documents</h3>
+        <p>Please upload PDF or image files (JPG/PNG) for document verification.</p>
+        <div class="mb-3">
+            <InputFile OnChange="HandleFileChange" multiple />
+        </div>
+        <button class="btn btn-primary" @onclick="SubmitDocuments">Submit</button>
+    </div>
+
+    <!-- Right: PDF Count Panel -->
+    <div class="bg-light border p-3 rounded" style="min-width: 200px;">
+        <h5 class="mb-2">📂 Uploaded Files</h5>
+        <p><strong>Total PDFs:</strong> @pdfCount</p>
+        <p><strong>Images:</strong> @imageCount</p>
+    </div>
+</div>
+
+@code {
+    private int pdfCount = 0;
+    private int imageCount = 0;
+
+    private async Task HandleFileChange(InputFileChangeEventArgs e)
+    {
+        pdfCount = 0;
+        imageCount = 0;
+
+        foreach (var file in e.GetMultipleFiles())
+        {
+            if (file.Name.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                pdfCount++;
+            else if (file.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                     file.Name.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                     file.Name.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                imageCount++;
+        }
+
+        await Task.Yield(); // Optional, just to avoid compiler warning
+    }
+
+    private async Task SubmitDocuments()
+    {
+        await Task.Yield(); // This avoids CS1998 warning
+        Console.WriteLine("Documents submitted.");
+    }
+}

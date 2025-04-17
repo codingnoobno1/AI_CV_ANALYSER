@@ -1,0 +1,17 @@
+@page "/analysis"
+@inject NavigationManager NavigationManager
+
+<h3>Resume Analysis</h3>
+<p>We found some data in your resume. Answer a few questions to tailor your profile:</p>
+
+<ul>
+    <li>What is your highest qualification?</li>
+    <li>Which domain are you interested in (AI, Web Dev, etc)?</li>
+    <li>Any certifications or internships?</li>
+</ul>
+
+<button class="btn btn-success" @onclick="GoToSkillGraph">Next</button>
+
+@code {
+    private void GoToSkillGraph() => NavigationManager.NavigateTo("/skill-graph");
+}

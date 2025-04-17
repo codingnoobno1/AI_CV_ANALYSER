@@ -1,0 +1,47 @@
+﻿<div class="top-row ps-3 navbar navbar-dark bg-dark shadow">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/">HR_Recruitment_Tool</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/">
+                <span class="bi bi-speedometer2" aria-hidden="true"></span> Dashboard
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/verify-candidate">
+                <span class="bi bi-file-earmark-check" aria-hidden="true"></span> Verify Candidate
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/interview">
+                <span class="bi bi-calendar-event" aria-hidden="true"></span> Interview Schedule
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/bias-report">
+                <span class="bi bi-bar-chart-line" aria-hidden="true"></span> Bias Report
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/insights-lab">
+                <span class="bi bi-lightbulb" aria-hidden="true"></span> Insights Lab
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/login">
+                <span class="bi bi-box-arrow-in-right" aria-hidden="true"></span> Login
+            </NavLink>
+        </div>
+    </nav>
+</div>
