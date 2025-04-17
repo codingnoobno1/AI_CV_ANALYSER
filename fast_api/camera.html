@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Resume Scanner</title>
+</head>
+<body>
+    <h2>📷 Live Resume Scanner</h2>
+    <video id="video" width="640" height="480" autoplay></video>
+    <br>
+    <button id="snap">Capture & Upload</button>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+
+    <div id="output" style="margin-top:20px; padding:10px; border:1px solid #ccc;">
+        <strong>Extracted Text:</strong>
+        <pre id="text-display" style="white-space: pre-wrap;"></pre>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const output = document.getElementById('text-display');
+
+        // Start camera stream
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+            })
+            .catch((err) => {
+                alert("Camera access denied or unavailable.");
+                console.error(err);
+            });
+
+        // Manual capture and upload
+        document.getElementById('snap').addEventListener('click', () => {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/png'); // Base64
+
+            fetch('http://localhost:8000/cv_scan/upload_image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image_data: imageData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                output.textContent = data.text || "[No text detected]";
+            })
+            .catch(error => {
+                console.error("Upload failed", error);
+                output.textContent = "[Error occurred during upload]";
+            });
+        });
+
+        // Automatic scan every 2 seconds
+        setInterval(() => {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/png');
+
+            fetch('http://localhost:8000/cv_scan/auto_scan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image_data: imageData })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.text && data.text.trim() !== "") {
+                    output.textContent = data.text;
+                }
+            })
+            .catch(err => {
+                console.error("Auto-scan failed", err);
+            });
+        }, 2000); // every 2 seconds
+    </script>
+</body>
+</html>
