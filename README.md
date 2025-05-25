@@ -1,4 +1,4 @@
-👥 Team Beginners — SkillSight: AI-Human Hybrid Recruitment Assistant
+👥 Team PIXEL — SkillSight: AI-Human Hybrid Recruitment Assistant
 🧠 Project Title
 SkillSight: Bridging AI & Human Expertise for Smarter Hiring
 🚩 Problem Statement
